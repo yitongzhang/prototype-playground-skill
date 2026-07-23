@@ -1,0 +1,220 @@
+/*
+ * Playground shell styling — Figma-file-style index + prototype chrome.
+ * Namespaced under .pg-* / --pg-* so it never collides with the extracted
+ * app design system. Do not restyle the shell per app; prototypes own the stage.
+ */
+:root {
+  --pg-bg: #f5f5f5;
+  --pg-surface: #ffffff;
+  --pg-border: #e4e4e4;
+  --pg-text: #1e1e1e;
+  --pg-text-dim: #6f6f6f;
+  --pg-accent: #0d99ff;
+  --pg-radius: 10px;
+  --pg-font:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--pg-bg);
+  color: var(--pg-text);
+  font-family: var(--pg-font);
+}
+
+/* ---------- Index (Figma files view) ---------- */
+
+.pg-index {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+.pg-index-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.pg-index-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.pg-count {
+  color: var(--pg-text-dim);
+  font-size: 13px;
+}
+
+.pg-warning {
+  color: #b3261e;
+  font-size: 13px;
+}
+
+.pg-section {
+  margin-top: 32px;
+}
+
+.pg-section h2 {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--pg-text-dim);
+  margin: 0 0 12px;
+}
+
+.pg-empty {
+  color: var(--pg-text-dim);
+  font-size: 13px;
+}
+
+.pg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.pg-card {
+  display: block;
+  background: var(--pg-surface);
+  border: 1px solid var(--pg-border);
+  border-radius: var(--pg-radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.pg-card:hover {
+  border-color: var(--pg-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pg-card-thumb {
+  aspect-ratio: 16 / 10;
+  background: #ececec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--pg-border);
+}
+
+.pg-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.pg-card-thumb-empty {
+  color: var(--pg-text-dim);
+  font-size: 12px;
+}
+
+.pg-card-body {
+  padding: 12px 14px 14px;
+}
+
+.pg-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pg-card-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pg-card-desc {
+  margin: 6px 0 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--pg-text-dim);
+}
+
+.pg-card-date {
+  font-size: 11px;
+  color: var(--pg-text-dim);
+}
+
+.pg-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--pg-accent);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+/* ---------- Prototype chrome ---------- */
+
+.pg-chrome {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.pg-chrome-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 40px;
+  padding: 0 14px;
+  background: var(--pg-surface);
+  border-bottom: 1px solid var(--pg-border);
+  font-size: 13px;
+  flex: none;
+}
+
+.pg-chrome-bar a {
+  color: var(--pg-text-dim);
+  text-decoration: none;
+}
+
+.pg-chrome-bar a:hover {
+  color: var(--pg-text);
+}
+
+.pg-chrome-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pg-chrome-title strong {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pg-chrome-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pg-chrome-count {
+  color: var(--pg-text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.pg-chrome-stage {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  /* The prototype owns everything inside the stage, including background. */
+}

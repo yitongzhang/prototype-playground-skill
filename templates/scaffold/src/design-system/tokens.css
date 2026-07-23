@@ -1,0 +1,9 @@
+/*
+ * Design tokens extracted from the source app — replaced during playground
+ * setup. Keep this the single source of truth for color, type, spacing,
+ * radius, and shadow. Prototypes and components consume these variables;
+ * hardcoded values in components are a bug.
+ */
+:root {
+  /* Populated by the prototype-playground extraction step. */
+}
