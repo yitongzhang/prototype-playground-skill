@@ -54,8 +54,10 @@ Establish, without modifying the source repo:
   types, API types, or DB schema. Name 3–8 entities, not the whole schema.
 - Fonts, icon system, logos, illustrations, global CSS reset.
 
-For large repos, fan out Explore subagents (tokens/theme, main-screen tree,
-data shapes, assets) and keep the conclusions in a scratch survey note.
+For large repos, fan out parallel read-only subagents if the harness
+supports them (one each for tokens/theme, main-screen tree, data shapes,
+assets); otherwise survey those four areas sequentially. Keep the
+conclusions in a scratch survey note.
 
 ## Phase 2 — Get reference pixels
 
@@ -135,8 +137,11 @@ restyle it to the product's exact spec — the scaffold is pre-wired for
    work when a user just talks to their agent with no idea how the repo is
    set up — its request-interpretation table maps product language ("try a
    version where…") to the right action (new iteration, never touch master).
-   The [templates/scaffold/CLAUDE.md](templates/scaffold/CLAUDE.md) shim
-   (`@AGENTS.md`) makes Claude Code load it automatically; leave it as is.
+   `AGENTS.md` is the cross-tool standard (Codex, Cursor, Devin, Copilot,
+   and others read it natively); the
+   [templates/scaffold/CLAUDE.md](templates/scaffold/CLAUDE.md) shim
+   (`@AGENTS.md`) covers Claude Code and is inert elsewhere — leave both
+   as they are.
 2. Final check: fresh `npm install && npm run build` passes; dev server
    shows index → master → back; commit.
    If the user wants it hosted, `dist/` is a plain static site — Netlify

@@ -1,10 +1,11 @@
 # prototype-playground
 
-A [Claude Code skill](https://docs.anthropic.com/en/docs/claude-code) that
-turns any product repo into a **standalone prototype playground**: a small
-local app with your product's design system, fake data, and a pixel-perfect
-clone of your main screen — so an agent can crank out UI iterations without
-touching production builds, backends, or secrets.
+An [Agent Skill](https://agentskills.io) (open `SKILL.md` standard — works
+in **Claude Code, Codex CLI, Cursor, and Devin**) that turns any product
+repo into a **standalone prototype playground**: a small local app with your
+product's design system, fake data, and a pixel-perfect clone of your main
+screen — so an agent can crank out UI iterations without touching production
+builds, backends, or secrets.
 
 ## Why
 
@@ -113,27 +114,28 @@ this as choreography, not intelligence:
 
 ## Install
 
-Clone into your Claude Code skills directory — globally:
+The skill follows the open Agent Skills standard, so installation is the
+same everywhere: clone this repo into your tool's skills directory.
+
+| Tool | Global install | Per-project |
+| --- | --- | --- |
+| Claude Code | `~/.claude/skills/prototype-playground` | `.claude/skills/prototype-playground` |
+| Codex CLI | `~/.codex/skills/prototype-playground` | `.codex/skills/prototype-playground` |
+| Cursor | — | `.cursor/skills/prototype-playground` |
+| Devin | — | commit into the repo per [Devin's skills docs](https://docs.devin.ai/product-guides/skills) |
+
+For example, Claude Code globally:
 
 ```bash
 git clone https://github.com/yitongzhang/prototype-playground-skill ~/.claude/skills/prototype-playground
 ```
 
-or per-project:
-
-```bash
-git clone https://github.com/yitongzhang/prototype-playground-skill .claude/skills/prototype-playground
-```
-
 ## Use
 
-From the repo you want to clone:
-
-```
-/prototype-playground
-```
-
-or with arguments:
+From the repo you want to clone, invoke it your tool's way — `/prototype-playground`
+in Claude Code, `$prototype-playground` in Codex — or just ask in plain
+words ("set up a prototype playground for this app"); every tool
+auto-triggers the skill from its description. With arguments:
 
 ```
 /prototype-playground path/to/repo "the inbox screen"
@@ -155,7 +157,10 @@ Afterwards, work directly in the playground:
 The generated `AGENTS.md` inside each playground carries these conventions,
 so any agent session — with or without this skill installed — knows to start
 new iterations instead of editing master, style from the design system, and
-read data only from fixtures.
+read data only from fixtures. `AGENTS.md` is the cross-tool standard (read
+natively by Codex, Cursor, Devin, Copilot, Gemini CLI, Windsurf, and more);
+a `CLAUDE.md` shim covers Claude Code. The playground itself is plain
+npm + Vite with zero agent-harness coupling.
 
 ## Repo layout
 
@@ -184,6 +189,10 @@ templates/scaffold/               # copied to create each new playground
 - The source repo is only ever read, never modified.
 - Templates are React; for Vue/Svelte/Angular sources the skill recreates
   the five small shell files in the source framework instead.
+- Harness-neutral by design: the skill references no tool-specific
+  capabilities — screenshots, subagents, and browsing are described by
+  intent ("whatever screenshot capability the environment has"), so each
+  harness uses its own equivalents.
 
 ## License
 
