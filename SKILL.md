@@ -128,8 +128,12 @@ conflict on the main screen, fidelity wins.
 1. Finish the playground `AGENTS.md` (from
    [templates/scaffold/AGENTS.md](templates/scaffold/AGENTS.md)): correct
    names, plus a short "Data model" section naming the entities and any
-   app-specific extraction notes. This file is what makes future "N variants
-   of X" sessions work without this skill loaded.
+   app-specific extraction notes. This file is what makes future sessions
+   work when a user just talks to their agent with no idea how the repo is
+   set up — its request-interpretation table maps product language ("try a
+   version where…") to the right action (new iteration, never touch master).
+   The [templates/scaffold/CLAUDE.md](templates/scaffold/CLAUDE.md) shim
+   (`@AGENTS.md`) makes Claude Code load it automatically; leave it as is.
 2. Final check: fresh `npm install && npm run build` passes; dev server
    shows index → master → back; commit.
    If the user wants it hosted, `dist/` is a plain static site — Netlify

@@ -1,7 +1,9 @@
 # {{APP_NAME}} Prototype Playground
 
-A standalone prototyping clone of {{APP_NAME}} (source repo: `{{SOURCE_REPO}}`).
-No backend, no network, no production secrets. Everything runs locally:
+This is a **prototype playground**, not a production app. It is a standalone
+clone of {{APP_NAME}} (source repo: `{{SOURCE_REPO}}`) built for one purpose:
+cheap, fast UI iteration. There is no backend, no network, no secrets — the
+design system, the fake data, and every prototype run entirely locally:
 
 ```bash
 npm install
@@ -11,22 +13,29 @@ npm run dev
 The index page (`#/`) is a Figma-files-style list of every prototype. Each
 prototype is a full app screen at `#/<slug>`.
 
-## Layout
+## How to interpret requests
 
-| Path | Owns |
+The user talks about the product, not about this repo's structure. Map their
+words to the right action:
+
+| The user says | You do |
 | --- | --- |
-| `src/shell/` | Playground navigation (index page, chrome, registry). Neutral `pg-*` styling — do not restyle per prototype. |
-| `src/design-system/` | Extracted tokens, typography, icons, illustrations, and core components. Single source of truth for all visual primitives. |
-| `src/data/` | Fake data: `types.ts` (domain types), `fixtures.ts` (the editable dataset), `index.ts` (store + hooks). |
-| `src/prototypes/master/` | Pixel-perfect clone of the production main screen. **Frozen — never edit.** |
-| `src/prototypes/<slug>/` | One directory per iteration. |
-| `reference/` | Production screenshots the master was verified against. |
-| `public/thumbnails/` | Card images for the index page. |
+| "Try a version where…", "redesign…", "what if the nav was…", "make it more…" | **Start a new iteration.** Copy master (or the iteration they name as the base), register it, build the idea there. |
+| "Make six variants of…" | Six new iteration directories, six registry entries. |
+| "Keep going on / tweak the sidebar one" | Edit **that existing iteration** only. |
+| "Add more tasks / change the data / longer titles" | Edit `src/data/fixtures.ts`. Nothing else changes. |
+| "The button looks off everywhere" | Fix the component or token in `src/design-system/` — it propagates to every prototype. |
+| "Master doesn't match production" | The **only** reason to touch master: re-verify against `reference/` and correct it toward production. |
 
-## Rules
+When in doubt: **new iteration**. Iterations are cheap and disposable; that
+is the whole point of this repo. Never burn an existing prototype to try a
+new idea, and never edit master to try anything.
 
-1. **Master is frozen.** `src/prototypes/master/` is the source of truth for
-   what production looks like. Iterations copy from it; nothing edits it.
+## The rules
+
+1. **Master is sacred.** `src/prototypes/master/` is the pixel-verified clone
+   of production and the baseline every iteration is judged against. It only
+   ever changes to match production better — never to explore an idea.
 2. **One directory per iteration.** Iterations are self-contained: shared code
    lives in `design-system/` and `data/`, everything else is copied, not
    imported across iterations. Divergence between iterations is the point.
@@ -40,6 +49,20 @@ prototype is a full app screen at `#/<slug>`.
    No fetch calls, no APIs, no timers pretending to be servers.
 5. **Keep the registry truthful.** Every prototype has an entry in
    `src/shell/registry.ts` with an honest description of what it explores.
+6. **Don't restyle the shell.** `src/shell/` (`pg-*` styles) is neutral
+   playground chrome, deliberately not part of the product's design system.
+
+## Layout
+
+| Path | Owns |
+| --- | --- |
+| `src/shell/` | Playground navigation (index page, chrome, registry). |
+| `src/design-system/` | Extracted tokens, typography, icons, illustrations, and core components. Single source of truth for all visual primitives. |
+| `src/data/` | Fake data: `types.ts` (domain types), `fixtures.ts` (the editable dataset), `index.ts` (store + hooks). |
+| `src/prototypes/master/` | Pixel-perfect clone of the production main screen. **Sacred — see rule 1.** |
+| `src/prototypes/<slug>/` | One directory per iteration. |
+| `reference/` | Production screenshots the master was verified against. |
+| `public/thumbnails/` | Card images for the index page. |
 
 ## Adding an iteration
 
@@ -54,11 +77,12 @@ prototype is a full app screen at `#/<slug>`.
 5. Optional: drop a screenshot at `public/thumbnails/<slug>.png` and set
    `thumbnail: '/thumbnails/<slug>.png'` on the registry entry.
 
-Batch requests like "make six nav variants" = six iteration directories, six
-registry entries, one shared design system and dataset.
-
 ## Deploying
 
 `npm run build` emits a plain static site in `dist/` — no server, no env
-vars. Host it anywhere static (Netlify drop, `npx vercel`, Cloudflare Pages,
-GitHub Pages); hash routing means no rewrite rules are needed.
+vars. The included GitHub Actions workflow (`.github/workflows/deploy-pages.yml`)
+publishes to GitHub Pages on every push to `main` once the repo's
+Settings → Pages → Source is set to "GitHub Actions". Any other static host
+(Netlify drop, `npx vercel`, Cloudflare Pages) also works; hash routing means
+no rewrite rules are needed. Note: GitHub Pages sites are **public** even
+when the repo is private.

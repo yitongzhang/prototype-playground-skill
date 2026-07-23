@@ -60,6 +60,16 @@ render and no API to route, so a meta-framework only adds boot time and
 concepts for the agent to trip over. `npm install && npm run dev` is the
 entire setup.
 
+Each playground ships with a GitHub Pages workflow: push to `main`, flip
+Settings → Pages → Source to "GitHub Actions" once, and the playground is
+live at `https://<user>.github.io/<repo>/`. One caveat: **GitHub Pages sites
+are public**, even from private repos (private visibility exists only on
+GitHub Enterprise Cloud org repos). Prototypes run on fake data so there is
+nothing sensitive server-side, but if the designs themselves are
+confidential, deploy the same `dist/` to a host with access control instead
+— Cloudflare Pages + Access (free), or Netlify/Vercel password protection
+(paid tiers).
+
 ## Install
 
 Clone into your Claude Code skills directory — globally:
