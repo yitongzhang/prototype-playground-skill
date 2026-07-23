@@ -26,6 +26,7 @@ words to the right action:
 | "Add more tasks / change the data / longer titles" | Edit `src/data/fixtures.ts`. Nothing else changes. |
 | "The button looks off everywhere" | Fix the component or token in `src/design-system/` — it propagates to every prototype. |
 | "Master doesn't match production" | The **only** reason to touch master: re-verify against `reference/` and correct it toward production. |
+| "Add a chat / assistant / agent panel" | New iteration using `src/agent/` (scripted transport) + shadcn chat components restyled to the design system. See "Prototyping agent chat". |
 
 When in doubt: **new iteration**. Iterations are cheap and disposable; that
 is the whole point of this repo. Never burn an existing prototype to try a
@@ -49,7 +50,14 @@ new idea, and never edit master to try anything.
    No fetch calls, no APIs, no timers pretending to be servers.
 5. **Keep the registry truthful.** Every prototype has an entry in
    `src/shell/registry.ts` with an honest description of what it explores.
-6. **Don't restyle the shell.** `src/shell/` (`pg-*` styles) is neutral
+6. **Harvest shadcn, never ship it stock.** For behavior-heavy primitives
+   (Select, Menu, Dialog, Tooltip, Combobox, chat surfaces), start from
+   `npx shadcn@latest add <component>` — `components.json` lands it in
+   `src/design-system/components/ui/` — keep its behavior and accessibility,
+   and replace its styling with this design system's tokens and the
+   product's exact spec. A control that still looks like stock shadcn is a
+   bug.
+7. **Don't restyle the shell.** `src/shell/` (`pg-*` styles) is neutral
    playground chrome, deliberately not part of the product's design system.
 
 ## Layout
@@ -59,6 +67,7 @@ new idea, and never edit master to try anything.
 | `src/shell/` | Playground navigation (index page, chrome, registry). |
 | `src/design-system/` | Extracted tokens, typography, icons, illustrations, and core components. Single source of truth for all visual primitives. |
 | `src/data/` | Fake data: `types.ts` (domain types), `fixtures.ts` (the editable dataset), `index.ts` (store + hooks). |
+| `src/agent/` | Fake-agent runtime: event transport, scripted player (`scripts.ts` is the editable conversation fixture), optional GitHub Models live transport. |
 | `src/prototypes/master/` | Pixel-perfect clone of the production main screen. **Sacred — see rule 1.** |
 | `src/prototypes/<slug>/` | One directory per iteration. |
 | `reference/` | Production screenshots the master was verified against. |
@@ -76,6 +85,28 @@ new idea, and never edit master to try anything.
    everything.
 5. Optional: drop a screenshot at `public/thumbnails/<slug>.png` and set
    `thumbnail: '/thumbnails/<slug>.png'` on the registry entry.
+
+## Prototyping agent chat
+
+Prototypes need believable motion, not intelligence. `src/agent/` is the
+whole runtime — no agent framework, no SDK:
+
+- **Default: the scripted agent** (`scriptedAgent` from `src/agent`). It
+  plays conversations defined in `src/agent/scripts.ts` with realistic
+  streaming pacing, thinking pauses, and tool-call events. Edit that file
+  like fixtures: one script per demo moment, replies grounded in the fake
+  data. Deterministic, offline, and it works on the deployed static build.
+- **Optional: live model via GitHub Models** (free for any GitHub account).
+  The user creates a PAT with only the `models:read` permission and puts
+  `GITHUB_MODELS_TOKEN=…` in `.env.local`; the Vite dev proxy injects it
+  server-side. Swap in `createGitHubModelsTransport({ system })` — same
+  event interface, one-line change. Dev-only: deployed builds have no proxy
+  and must use the scripted agent. Never ask for or handle the token value
+  yourself; the user edits `.env.local` directly.
+- **Chat UI**: harvest shadcn's chat components
+  (`npx shadcn@latest add message-scroller message bubble attachment marker`)
+  and restyle them per rule 6. Don't rebuild scroll anchoring or streaming
+  rendering by hand, and don't embed third-party chat widgets.
 
 ## Deploying
 

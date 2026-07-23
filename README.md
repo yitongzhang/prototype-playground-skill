@@ -38,6 +38,13 @@ repo containing:
    card (master + iterations); click into one for a full-screen prototype
    with prev/next switching. A generated `AGENTS.md` inside the playground
    teaches future agent sessions how to add iterations correctly.
+5. **A fake-agent runtime** — for prototyping assistant/chat surfaces. A
+   scripted transport streams fixture-defined conversations (thinking, tool
+   calls, word-by-word replies) deterministically, offline, even on the
+   deployed build; an optional live transport talks to GitHub Models (free
+   for any GitHub account, dev-only, token never leaves the Vite proxy). No
+   agent framework — one small event interface. Chat UI is harvested from
+   shadcn's chat components and restyled to the extracted design system.
 
 ## The stack (and why it's fixed)
 

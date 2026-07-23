@@ -90,7 +90,10 @@ Follow [references/design-system-extraction.md](references/design-system-extract
 Order: tokens → fonts/icons/illustrations (copied verbatim) → core
 components. Extraction is a cleanup: collapse duplicate values into semantic
 tokens, but never change what pixels render — when purity and fidelity
-conflict on the main screen, fidelity wins.
+conflict on the main screen, fidelity wins. For behavior-heavy primitives
+(selects, menus, dialogs, chat), harvest shadcn/ui as the baseline and
+restyle it to the product's exact spec — the scaffold is pre-wired for
+`npx shadcn add`; stock shadcn styling must never survive into a prototype.
 
 ## Phase 5 — Build the fake data layer
 
@@ -142,6 +145,17 @@ conflict on the main screen, fidelity wins.
 3. Report: playground path, how to run it, the three deliverables, the
    verification evidence (reference vs. master screenshots), and every known
    remaining visual difference — honestly.
+
+## Agent surfaces
+
+When the product has (or the user wants) an assistant/chat/agent-session
+surface, follow
+[references/agent-prototyping.md](references/agent-prototyping.md). Summary:
+the scaffold's `src/agent/` module is the whole runtime — a scripted
+transport (default: deterministic, offline, deploys with the static build)
+and a GitHub Models live transport (free, dev-only via the Vite proxy) behind
+one event interface; no agent framework. Chat UI is harvested from shadcn's
+chat components and restyled to the extracted design system.
 
 ## Robustness notes
 

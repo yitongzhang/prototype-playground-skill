@@ -77,6 +77,19 @@ Skip any of these the source app genuinely lacks.
 - Read the **source component's code** for exact padding, radius, border,
   font, and state styles — do not eyeball from screenshots when code exists.
   Port hover/focus/active/disabled states; skip rare props and edge variants.
+- **Harvest shadcn for behavior-heavy primitives; never ship it stock.** For
+  anything with real interaction logic — Select, Dropdown/Menu, Dialog,
+  Tooltip, Popover, Combobox, Tabs, chat surfaces — do not rebuild behavior
+  from scratch: `npx shadcn@latest add <component>` (the scaffold's
+  `components.json` lands it in `src/design-system/components/ui/`), keep its
+  structure, behavior, and accessibility, then **replace its styling layer**
+  with the product's: swap shadcn's semantic classes/variants for extracted
+  tokens and the exact paddings, radii, and states read from the source
+  component. Deleting shadcn's own `--background`-style variables is
+  expected. A control that still looks like stock shadcn is an extraction
+  failure — the baseline is borrowed, the pixels are the product's.
+- Simple primitives with no behavior (Button, Badge, Card, Avatar) can be
+  written directly when that is less code than restyling a harvest.
 - Every component consumes tokens — via token-derived Tailwind utilities or
   `var(--…)` directly. A hardcoded color or size in a component is a bug in
   the extraction; a Tailwind arbitrary value (`h-[37px]`) is acceptable only
