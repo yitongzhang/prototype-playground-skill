@@ -28,8 +28,10 @@ elements of the main screen, then normalize.
 
 ## 2. Clean while extracting
 
-Write the result as CSS custom properties in `src/design-system/tokens.css`,
-two tiers:
+Write the result into the Tailwind v4 `@theme` block in
+`src/design-system/tokens.css` — tokens are CSS custom properties there, and
+Tailwind derives utilities (`bg-surface`, `text-muted`, `rounded-input`) from
+them automatically. Two tiers:
 
 1. **Primitives** — the raw ramps: `--color-gray-100…900`, `--color-brand-*`,
    type sizes, spacing steps, radii, shadows.
@@ -75,8 +77,10 @@ Skip any of these the source app genuinely lacks.
 - Read the **source component's code** for exact padding, radius, border,
   font, and state styles — do not eyeball from screenshots when code exists.
   Port hover/focus/active/disabled states; skip rare props and edge variants.
-- Every component consumes tokens. A hardcoded color or size in a component
-  is a bug in the extraction.
+- Every component consumes tokens — via token-derived Tailwind utilities or
+  `var(--…)` directly. A hardcoded color or size in a component is a bug in
+  the extraction; a Tailwind arbitrary value (`h-[37px]`) is acceptable only
+  for a genuine one-off the source app also hardcodes.
 - Keep components in `src/design-system/components/`, one file each, typed
   props, no external UI-kit dependency (unless the source app's kit — e.g.
   Radix primitives — is load-bearing for behavior worth keeping).

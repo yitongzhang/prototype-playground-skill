@@ -39,8 +39,25 @@ repo containing:
    with prev/next switching. A generated `AGENTS.md` inside the playground
    teaches future agent sessions how to add iterations correctly.
 
-The playground itself is dependency-light on purpose: React + Vite, hash
-routing, zero router/state libraries. `npm install && npm run dev` is the
+## The stack (and why it's fixed)
+
+Playgrounds are always **Vite + React + TypeScript + Tailwind v4**, built as
+a static SPA with hash routing and zero router/state libraries. The skill
+assumes the user has no stack opinion and optimizes for:
+
+- **Live iteration** — Vite's sub-second boot and best-in-class HMR mean you
+  talk to the agent and watch the prototype update in real time.
+- **Agent fluency** — React + TypeScript + Tailwind is the highest
+  training-data stack there is; agents iterate fastest in it, and Tailwind
+  v4's `@theme` block is exactly the shape the extracted design tokens take.
+- **Click-deploy hosting** — `npm run build` emits a plain `dist/` folder.
+  No server, no env vars, no rewrite rules (that's what the hash routing is
+  for): drag it into Netlify, run `npx vercel`, or point Cloudflare/GitHub
+  Pages at it.
+
+Deliberately **not** Next.js or any meta-framework: there is no backend to
+render and no API to route, so a meta-framework only adds boot time and
+concepts for the agent to trip over. `npm install && npm run dev` is the
 entire setup.
 
 ## Install

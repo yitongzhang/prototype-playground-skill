@@ -1,9 +1,17 @@
 /*
  * Design tokens extracted from the source app — replaced during playground
- * setup. Keep this the single source of truth for color, type, spacing,
- * radius, and shadow. Prototypes and components consume these variables;
+ * setup. Tokens live in the Tailwind v4 @theme block, so every utility class
+ * (bg-surface, text-muted, rounded-input, …) derives from them. This file is
+ * the single source of truth for color, type, spacing, radius, and shadow;
  * hardcoded values in components are a bug.
  */
-:root {
-  /* Populated by the prototype-playground extraction step. */
+@import 'tailwindcss';
+
+@theme {
+  /* Populated by the prototype-playground extraction step, e.g.:
+   * --color-surface: #ffffff;
+   * --color-text-muted: #6b7280;
+   * --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+   * --radius-input: 6px;
+   */
 }

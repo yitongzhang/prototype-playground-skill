@@ -76,9 +76,13 @@ step that may need the user. Save to `reference/` in the playground.
    install`), run `npm run dev`, and confirm the index page and the
    placeholder master render. Commit the working scaffold.
 
-The scaffold is dependency-light on purpose (React + Vite only, hash
-routing, no router/state libraries). The shell (`src/shell/`) is neutral
-`pg-*` styled and is never themed per app.
+The stack is fixed: **Vite + React + TypeScript + Tailwind v4, static SPA,
+hash routing, no router/state libraries**. It is chosen for instant HMR (the
+user watches changes land live while the agent works), maximum agent fluency,
+and zero-config static hosting (`dist/` deploys to any static host; hash
+routing needs no rewrite rules). Do not swap in Next.js or another
+meta-framework — there is no server to render and no API to route. The shell
+(`src/shell/`) is neutral `pg-*` plain CSS and is never themed per app.
 
 ## Phase 4 — Extract the design system
 
@@ -128,6 +132,9 @@ conflict on the main screen, fidelity wins.
    of X" sessions work without this skill loaded.
 2. Final check: fresh `npm install && npm run build` passes; dev server
    shows index → master → back; commit.
+   If the user wants it hosted, `dist/` is a plain static site — Netlify
+   drop, `npx vercel`, Cloudflare Pages, or GitHub Pages all work with no
+   config.
 3. Report: playground path, how to run it, the three deliverables, the
    verification evidence (reference vs. master screenshots), and every known
    remaining visual difference — honestly.

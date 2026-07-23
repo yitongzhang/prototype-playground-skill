@@ -31,8 +31,10 @@ prototype is a full app screen at `#/<slug>`.
    lives in `design-system/` and `data/`, everything else is copied, not
    imported across iterations. Divergence between iterations is the point.
 3. **All visuals come from the design system.** Use tokens and components from
-   `src/design-system/`. If an iteration needs a new primitive, add it to the
-   design system (token-driven), not inline.
+   `src/design-system/`. Tokens live in the Tailwind v4 `@theme` block in
+   `tokens.css`, so token-derived utilities (`bg-surface`, `text-muted`) are
+   the normal way to style. If an iteration needs a new primitive, add it to
+   the design system (token-driven), not inline.
 4. **All data comes from fixtures.** Read state via the hooks in `src/data/`.
    To change what the app shows, edit `src/data/fixtures.ts` — nothing else.
    No fetch calls, no APIs, no timers pretending to be servers.
@@ -54,3 +56,9 @@ prototype is a full app screen at `#/<slug>`.
 
 Batch requests like "make six nav variants" = six iteration directories, six
 registry entries, one shared design system and dataset.
+
+## Deploying
+
+`npm run build` emits a plain static site in `dist/` — no server, no env
+vars. Host it anywhere static (Netlify drop, `npx vercel`, Cloudflare Pages,
+GitHub Pages); hash routing means no rewrite rules are needed.
