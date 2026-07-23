@@ -77,6 +77,12 @@ Skip any of these the source app genuinely lacks.
 - Read the **source component's code** for exact padding, radius, border,
   font, and state styles — do not eyeball from screenshots when code exists.
   Port hover/focus/active/disabled states; skip rare props and edge variants.
+- **Harvest fresh, at prototype time.** Always pull components with
+  `npx shadcn@latest add` in the playground — never vendor shadcn source
+  from elsewhere or copy from another project, so every playground gets the
+  current registry. Once harvested, the component is owned by the
+  playground; to pick up a newer upstream version later, re-run the add
+  with `--overwrite` and re-apply the restyle.
 - **Harvest shadcn for behavior-heavy primitives; never ship it stock.** For
   anything with real interaction logic — Select, Dropdown/Menu, Dialog,
   Tooltip, Popover, Combobox, Tabs, chat surfaces — do not rebuild behavior

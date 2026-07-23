@@ -124,7 +124,17 @@ restyle it to the product's exact spec — the scaffold is pre-wired for
    differences remain.
 3. Fix root causes in the **design system**, not with local overrides in the
    master — every fix there pays off in all future iterations.
-4. Capture `public/thumbnails/master.png`, set it on the registry entry, and
+4. **Depth boundary.** Master is a baseline for comparison, not a full app
+   clone. In scope: the one main screen at the reference viewport,
+   pixel-perfect; component interaction states (hover/focus/active), which
+   come free from extraction; and the cheap local interactions the screen
+   itself implies (check off an item, select a row) via the data store, so
+   the prototype feels alive. Out of scope: other routes and screens,
+   modals and flows not visible in the reference, responsive breakpoints,
+   and elaborate animation. Those are built on demand — in iterations, or
+   as an explicit master extension when the user supplies a reference
+   screenshot for another screen.
+5. Capture `public/thumbnails/master.png`, set it on the registry entry, and
    copy the final verified screenshot into `reference/` alongside the
    production original.
 
