@@ -77,6 +77,40 @@ confidential, deploy the same `dist/` to a host with access control instead
 — Cloudflare Pages + Access (free), or Netlify/Vercel password protection
 (paid tiers).
 
+## Components: harvested, never rebuilt, never stock
+
+Standard primitives — selects, menus, dialogs, comboboxes, chat surfaces —
+are not rebuilt from scratch and not left looking like a template. The rule
+is **harvest shadcn/ui as the behavior baseline, then restyle it to your
+product's exact spec**: every playground ships pre-wired for
+`npx shadcn@latest add <component>` (a `components.json` that lands
+components in `src/design-system/components/ui/`, the `@` alias, the `cn`
+helper, and the baseline deps). Agents keep shadcn's structure,
+accessibility, and interaction logic, and replace its styling layer with the
+tokens and measurements extracted from your real app. A control that still
+looks like stock shadcn is treated as a bug.
+
+## Prototyping agent chat
+
+Designing an assistant, agent session, or chat surface? Playgrounds treat
+this as choreography, not intelligence:
+
+- **Scripted agent (default).** `src/agent/` ships in every playground: a
+  ~150-line event runtime (thinking, tool calls, word-by-word streaming)
+  that plays conversations you define in `src/agent/scripts.ts` like
+  fixtures. Deterministic for design reviews, works offline, and keeps
+  working on the public deployed build. No agent framework.
+- **Live model (optional).** Swap one line to talk to
+  [GitHub Models](https://docs.github.com/github-models/prototyping-with-ai-models)
+  — free inference for every GitHub account. Create a PAT with only the
+  `models:read` permission, put `GITHUB_MODELS_TOKEN=…` in `.env.local`
+  (gitignored), restart `npm run dev`. The Vite dev proxy injects the token
+  server-side, so it never enters the bundle; deployed builds automatically
+  fall back to the scripted agent.
+- **Chat UI.** Harvested from shadcn's chat components (`message-scroller`,
+  `message`, `bubble`, `attachment`, `marker`) and restyled to your design
+  system, per the rule above.
+
 ## Install
 
 Clone into your Claude Code skills directory — globally:
@@ -114,19 +148,32 @@ Afterwards, work directly in the playground:
 > "Make six iterations exploring different sidebar densities."
 >
 > "Add 50 more tasks to the fixtures with longer titles."
+>
+> "Add an assistant panel that can summarize my week — script three
+> conversations."
+
+The generated `AGENTS.md` inside each playground carries these conventions,
+so any agent session — with or without this skill installed — knows to start
+new iterations instead of editing master, style from the design system, and
+read data only from fixtures.
 
 ## Repo layout
 
 ```
 SKILL.md                          # the workflow (phases 0–7 + robustness notes)
 references/
-  design-system-extraction.md     # where tokens hide per stack; cleaning rules
+  design-system-extraction.md     # where tokens hide per stack; cleaning +
+                                  #   shadcn-harvest rules
   pixel-perfect-verification.md   # screenshot-diff loop; exit criteria
+  agent-prototyping.md            # scripted vs live transports; chat UI harvest
 templates/scaffold/               # copied to create each new playground
-  AGENTS.md                       # rules shipped inside every playground
+  AGENTS.md + CLAUDE.md           # behavior rules shipped inside every playground
+  components.json                 # pre-wired `npx shadcn add` target paths
+  .github/workflows/              # push-to-deploy GitHub Pages workflow
   src/shell/                      # Figma-style index + prototype chrome
   src/design-system/              # tokens + components (filled by extraction)
   src/data/                       # store + fixtures (filled by extraction)
+  src/agent/                      # fake-agent runtime + GitHub Models transport
   src/prototypes/master/          # replaced by the pixel-perfect clone
 ```
 
