@@ -1,7 +1,7 @@
 ---
 name: prototype-playground
 description: Scaffold a standalone prototype playground from any product repo — extract a cleaned design system (tokens, typography, icons, core components), build a local fake-data layer, and clone the app's main screen pixel-perfect, all wrapped in a Figma-files-style index that holds many prototype iterations. Use when asked to set up a prototype playground, clone an app for fast UI prototyping, or create a design sandbox detached from production builds, backends, and secrets.
-argument-hint: [source-repo-path] [main screen to clone]
+argument-hint: "[source-repo-path] [main screen to clone]"
 ---
 
 # Prototype Playground
