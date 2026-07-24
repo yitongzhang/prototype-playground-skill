@@ -1,7 +1,6 @@
 # Prototype Playground Setup
 
-An [Agent Skill](https://agentskills.io) (open `SKILL.md` standard — works
-in **Claude Code, Codex CLI, Cursor, and Devin**) that turns any product
+An [Agent Skill](https://agentskills.io) that turns any product
 repo into a **standalone prototype playground**: a small local app with your
 product's design system, fake data, and a pixel-perfect clone of your main
 screen — so an agent can crank out UI iterations without touching production
@@ -55,7 +54,7 @@ repo containing:
    system and fixtures, verified pixel-perfect against a production
    screenshot in a screenshot-diff loop. It's registered as the frozen
    source of truth.
-4. **A Figma-files-style shell** — the index page lists every prototype as a
+4. **A lil app to view your prototypes** — the index page lists every prototype as a
    card (master + iterations); click into one for a full-screen prototype
    with prev/next switching. A generated `AGENTS.md` inside the playground
    teaches future agent sessions how to add iterations correctly.
