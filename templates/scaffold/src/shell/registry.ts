@@ -27,7 +27,7 @@ export const prototypes: PrototypeEntry[] = [
     slug: 'master',
     name: 'Master — production clone',
     description:
-      'Pixel-perfect clone of the production main screen. Source of truth for all iterations; do not modify.',
+      'Pixel-perfect clone of production (main screen and its one-click surfaces). Source of truth for all iterations; do not modify.',
     kind: 'master',
     createdAt: '{{TODAY}}',
     load: () => import('../prototypes/master'),

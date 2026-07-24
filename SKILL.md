@@ -21,9 +21,10 @@ behind one Figma-files-style index.
    one semantic system, duplicates collapsed, same rendered pixels.
 2. **Fake data** — typed local fixtures replicating the app's core data
    shapes; the whole app runs off one editable `fixtures.ts`, no network.
-3. **Master prototype** — the app's main screen rendered pixel-perfect
-   against a production reference screenshot, registered as the frozen
-   source of truth.
+3. **Master prototype** — the agreed scope (a named screen, or the main
+   screen plus its one-click surfaces) rendered pixel-perfect against
+   production reference screenshots, with working navigation between its
+   surfaces, registered as the frozen source of truth.
 4. **Playground shell** — index page listing master + iterations
    (Figma-file navigation), prototype chrome with prev/next switching, and a
    playground `AGENTS.md` so future agents extend it correctly.
@@ -32,10 +33,16 @@ behind one Figma-files-style index.
 ## Phase 0 — Inputs
 
 - **Source repo**: the argument, else the current working directory.
-- **Main screen**: what the user named, else the screen users spend their
-  time in after login (the inbox / board / feed / editor — not the marketing
-  page, not settings). If genuinely ambiguous, ask; this one choice shapes
-  everything downstream.
+- **Master scope — ask the user**: do they want a **specific part** cloned
+  (a named screen or flow), or a **generic setup**? This is the one question
+  to always ask up front; it shapes everything downstream.
+  - *Specific*: clone exactly what they name.
+  - *Generic*: identify the main screen — where users spend their time
+    after login (the inbox / board / feed / editor — not the marketing
+    page, not settings) — then go **one level deeper**: every major surface
+    reachable in one click from it (detail views, item modals, primary nav
+    destinations, the composer). "Major" means surfaces users spend time
+    in; skip trivial menus, tooltips, and confirmations.
 - **Playground location**: sibling directory `<source>-playground` unless the
   user says otherwise. Never inside the source repo.
 
@@ -48,8 +55,9 @@ Establish, without modifying the source repo:
   [references/design-system-extraction.md](references/design-system-extraction.md)).
 - Which package/app owns the main screen (monorepos: survey only that app and
   the design packages it imports).
-- The main screen's component tree: read the actual page component and what
-  it renders, top to bottom.
+- The component tree of every screen in the master scope: read the actual
+  page components and what they render, top to bottom — for generic scope,
+  the main screen and each one-click surface.
 - Core domain entities behind that screen — from its props/queries/store
   types, API types, or DB schema. Name 3–8 entities, not the whole schema.
 - Fonts, icon system, logos, illustrations, global CSS reset.
@@ -63,9 +71,13 @@ conclusions in a scratch survey note.
 
 Follow [references/pixel-perfect-verification.md](references/pixel-perfect-verification.md)
 §1: run the source app locally if it starts without missing secrets,
-otherwise ask the user for a production screenshot of the main screen. Do
-this **before** building — it gates the pixel-perfect claim and is the one
-step that may need the user. Save to `reference/` in the playground.
+otherwise ask the user for production screenshots. Capture the main screen
+plus, for a generic-scope master, each one-click surface in scope (click
+into the detail view, open the modal, visit each nav destination). Do this
+**before** building — the main-screen reference gates the pixel-perfect
+claim, and this is the one step that may need the user. Save all captures
+to `reference/` in the playground; a surface with no reference gets the
+honest "faithful reconstruction" downgrade, not a pixel-perfect claim.
 
 ## Phase 3 — Scaffold
 
@@ -124,16 +136,19 @@ restyle it to the product's exact spec — the scaffold is pre-wired for
    differences remain.
 3. Fix root causes in the **design system**, not with local overrides in the
    master — every fix there pays off in all future iterations.
-4. **Depth boundary.** Master is a baseline for comparison, not a full app
-   clone. In scope: the one main screen at the reference viewport,
-   pixel-perfect; component interaction states (hover/focus/active), which
-   come free from extraction; and the cheap local interactions the screen
-   itself implies (check off an item, select a row) via the data store, so
-   the prototype feels alive. Out of scope: other routes and screens,
-   modals and flows not visible in the reference, responsive breakpoints,
-   and elaborate animation. Those are built on demand — in iterations, or
-   as an explicit master extension when the user supplies a reference
-   screenshot for another screen.
+4. **Depth boundary — set by the Phase 0 scope.** *Specific scope*: build
+   exactly the named screen or flow. *Generic scope*: the main screen
+   pixel-perfect, plus every in-scope one-click surface — and the clicks
+   really work: selecting an item opens its detail view, the nav navigates,
+   the composer opens. Verify the main screen against its reference in the
+   full loop; verify each one-click surface against its own capture (or
+   mark it faithful-reconstruction if no reference exists). Both scopes
+   include component interaction states (hover/focus/active — free from
+   extraction) and the cheap local interactions the screens imply (check
+   off an item, select a row) via the data store. Out of scope always:
+   surfaces two clicks deep, minor menus/confirmations, responsive
+   breakpoints, and elaborate animation — iteration work, or an explicit
+   master extension when the user supplies a new reference.
 5. Capture `public/thumbnails/master.png`, set it on the registry entry, and
    copy the final verified screenshot into `reference/` alongside the
    production original.

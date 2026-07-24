@@ -68,7 +68,7 @@ new idea, and never edit master to try anything.
 | `src/design-system/` | Extracted tokens, typography, icons, illustrations, and core components. Single source of truth for all visual primitives. |
 | `src/data/` | Fake data: `types.ts` (domain types), `fixtures.ts` (the editable dataset), `index.ts` (store + hooks). |
 | `src/agent/` | Fake-agent runtime: event transport, scripted player (`scripts.ts` is the editable conversation fixture), optional GitHub Models live transport. |
-| `src/prototypes/master/` | Pixel-perfect clone of the production main screen. **Sacred — see rule 1.** |
+| `src/prototypes/master/` | Pixel-perfect clone of production — the main screen and its one-click surfaces, with working navigation. **Sacred — see rule 1.** |
 | `src/prototypes/<slug>/` | One directory per iteration. |
 | `reference/` | Production screenshots the master was verified against. |
 | `public/thumbnails/` | Card images for the index page. |
