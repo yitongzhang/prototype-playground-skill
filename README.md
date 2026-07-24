@@ -9,16 +9,22 @@ Think of it like getting a working copy of your app on a design table: you
 can repaint it, rearrange it, and try ten versions side by side, and nothing
 you do can break the real thing.
 
-## Getting started
+## Quick start
 
-Open your AI coding agent (Claude Code, Codex, Cursor, and others) inside the
-app's codebase, and say:
+**Step 1 — install it** (one command; works with Claude Code, Codex, Cursor,
+and others, auto-detected):
+
+```bash
+npx skills add yitongzhang/prototype-playground-setup
+```
+
+**Step 2 — open your AI coding agent inside the app's codebase and say:**
 
 > Set up a prototype playground for this repo.
 
 The agent does the rest — it studies the app and builds you the playground.
 When it's done, it'll tell you how to open it in your browser. That's the
-one setup step; from then on you just talk to the agent.
+whole setup; from then on you just talk to the agent.
 
 ## What you get
 
