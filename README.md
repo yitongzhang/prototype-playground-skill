@@ -1,4 +1,4 @@
-# prototype-playground
+# Prototype Playground Setup
 
 An [Agent Skill](https://agentskills.io) (open `SKILL.md` standard — works
 in **Claude Code, Codex CLI, Cursor, and Devin**) that turns any product
@@ -9,17 +9,23 @@ builds, backends, or secrets.
 
 ## Quick start
 
-Open your agent in the repo you want to clone and paste this:
+**One command** installs it into whatever agent you're using (auto-detected):
 
-```text
-Clone https://github.com/yitongzhang/prototype-playground-skill into a temp
-directory, read its SKILL.md, and follow it to set up a prototype playground
-for this repo.
+```bash
+npx skills add yitongzhang/prototype-playground-setup
 ```
 
-That's it — no install needed; it works in any coding agent. (For repeated
-use, install it as a proper skill below so "set up a prototype playground"
-triggers it automatically.)
+Then, from the repo you want to clone, just say:
+
+> set up a prototype playground for this repo
+
+**No install at all?** Paste this into any coding agent instead:
+
+```text
+Read the SKILL.md at
+https://github.com/yitongzhang/prototype-playground-setup/blob/main/skills/prototype-playground/SKILL.md
+and follow it to set up a prototype playground for this repo.
+```
 
 ## Why
 
@@ -128,20 +134,20 @@ this as choreography, not intelligence:
 
 ## Install
 
-The skill follows the open Agent Skills standard, so installation is the
-same everywhere: clone this repo into your tool's skills directory.
-
-| Tool | Global install | Per-project |
-| --- | --- | --- |
-| Claude Code | `~/.claude/skills/prototype-playground` | `.claude/skills/prototype-playground` |
-| Codex CLI | `~/.codex/skills/prototype-playground` | `.codex/skills/prototype-playground` |
-| Cursor | — | `.cursor/skills/prototype-playground` |
-| Devin | — | commit into the repo per [Devin's skills docs](https://docs.devin.ai/product-guides/skills) |
-
-For example, Claude Code globally:
+The [`skills` CLI](https://github.com/vercel-labs/skills) installs it into
+whatever agent you're running (27+ supported), globally or per-project:
 
 ```bash
-git clone https://github.com/yitongzhang/prototype-playground-skill ~/.claude/skills/prototype-playground
+npx skills add yitongzhang/prototype-playground-setup
+```
+
+Prefer to do it by hand? It's an open Agent Skill — clone the skill folder
+into your tool's skills directory (`~/.claude/skills/`, `~/.codex/skills/`,
+`.cursor/skills/`, or the repo itself for Devin):
+
+```bash
+git clone https://github.com/yitongzhang/prototype-playground-setup /tmp/pps \
+  && cp -r /tmp/pps/skills/prototype-playground ~/.claude/skills/
 ```
 
 ## Use
@@ -155,9 +161,9 @@ auto-triggers the skill from its description. With arguments:
 /prototype-playground path/to/repo "the inbox screen"
 ```
 
-The skill surveys the repo, asks for a production screenshot only if it
-can't run the app locally, and builds the playground as a sibling directory.
-Afterwards, work directly in the playground:
+The skill surveys the repo, asks whether you want a specific screen or a
+generic setup, gathers reference screenshots, and builds the playground as a
+sibling directory. Afterwards, work directly in the playground:
 
 > "Copy master and try a version with a command-bar-first navigation."
 >
@@ -179,13 +185,14 @@ npm + Vite with zero agent-harness coupling.
 ## Repo layout
 
 ```
-SKILL.md                          # the workflow (phases 0–7 + robustness notes)
-references/
-  design-system-extraction.md     # where tokens hide per stack; cleaning +
+skills/prototype-playground/
+  SKILL.md                        # the workflow (phases 0–7 + robustness notes)
+  references/
+    design-system-extraction.md   # where tokens hide per stack; cleaning +
                                   #   shadcn-harvest rules
-  pixel-perfect-verification.md   # screenshot-diff loop; exit criteria
-  agent-prototyping.md            # scripted vs live transports; chat UI harvest
-templates/scaffold/               # copied to create each new playground
+    pixel-perfect-verification.md # screenshot-diff loop; exit criteria
+    agent-prototyping.md          # scripted vs live transports; chat UI harvest
+  templates/scaffold/             # copied to create each new playground
   AGENTS.md + CLAUDE.md           # behavior rules shipped inside every playground
   components.json                 # pre-wired `npx shadcn add` target paths
   .github/workflows/              # push-to-deploy GitHub Pages workflow
