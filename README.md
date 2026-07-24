@@ -9,6 +9,18 @@ Think of it like getting a working copy of your app on a design table: you
 can repaint it, rearrange it, and try ten versions side by side, and nothing
 you do can break the real thing.
 
+## Why
+
+Trying design ideas inside the real app is slow and scary. It's slow to load,
+it needs passwords and servers and real data to even run, and every change
+risks breaking something people depend on — so ideas rarely get tried at all.
+
+The playground removes all of that. It's a fast, private copy that runs on
+its own with fake data, so there's nothing to break and nothing to set up.
+Suddenly *"what if we tried it this way?"* costs a sentence instead of a
+sprint — and you can explore ten directions in the time it used to take to
+carefully make one.
+
 ## Quick start
 
 **Step 1 — install it** (one command; works with Claude Code, Codex, Cursor,
