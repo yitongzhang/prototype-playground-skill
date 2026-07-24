@@ -1,219 +1,85 @@
 # Prototype Playground Setup
 
-An [Agent Skill](https://agentskills.io) that turns any product
-repo into a **standalone prototype playground**: a small local app with your
-product's design system, fake data, and a pixel-perfect clone of your main
-screen — so an agent can crank out UI iterations without touching production
-builds, backends, or secrets.
+Turn any app's codebase into a **playground for trying design ideas** — a
+private sandbox where you can ask an AI agent to redesign screens, try new
+layouts, and explore directions, and *see them running instantly* without
+touching the real product.
 
-## Quick start
+Think of it like getting a working copy of your app on a design table: you
+can repaint it, rearrange it, and try ten versions side by side, and nothing
+you do can break the real thing.
 
-**One command** installs it into whatever agent you're using (auto-detected):
+## Getting started
 
-```bash
-npx skills add yitongzhang/prototype-playground-setup
-```
+Open your AI coding agent (Claude Code, Codex, Cursor, and others) inside the
+app's codebase, and say:
 
-Then, from the repo you want to clone, just say:
+> Set up a prototype playground for this repo.
 
-> set up a prototype playground for this repo
-
-**No install at all?** Paste this into any coding agent instead:
-
-```text
-Read the SKILL.md at
-https://github.com/yitongzhang/prototype-playground-setup/blob/main/skills/prototype-playground/SKILL.md
-and follow it to set up a prototype playground for this repo.
-```
-
-## Why
-
-Prototyping inside a production repo is slow. CI builds are heavy, secrets
-are missing, the backend has to be up, and every experiment risks breaking
-something real. Iterating on data shapes through a live database is even
-worse.
-
-This skill does a one-time extraction into a clean sibling repo. After that,
-requests like *"give me six versions of this app with six different
-navigation styles"* become six cheap, self-contained iteration directories —
-no infrastructure involved.
+The agent does the rest — it studies the app and builds you the playground.
+When it's done, it'll tell you how to open it in your browser. That's the
+one setup step; from then on you just talk to the agent.
 
 ## What you get
 
-Running the skill against a source repo produces a `<your-app>-playground`
-repo containing:
+The agent builds you a small, self-contained version of your app with four
+things already done for you:
 
-1. **A cleaned design system** — tokens (color, type, spacing, radius,
-   shadow), fonts, icons, illustrations, and core components, extracted *as
-   they should exist*: one semantic system, duplicates collapsed, identical
-   rendered pixels.
-2. **A fake data layer** — typed fixtures replicating your app's core data
-   shapes. The whole app runs off one editable `fixtures.ts`; interactions
-   work through a tiny observable store. No network, ever.
-3. **A master prototype** — your app's main screen, rebuilt from the design
-   system and fixtures, verified pixel-perfect against a production
-   screenshot in a screenshot-diff loop. It's registered as the frozen
-   source of truth.
-4. **A lil app to view your prototypes** — the index page lists every prototype as a
-   card (master + iterations); click into one for a full-screen prototype
-   with prev/next switching. A generated `AGENTS.md` inside the playground
-   teaches future agent sessions how to add iterations correctly.
-5. **A fake-agent runtime** — for prototyping assistant/chat surfaces. A
-   scripted transport streams fixture-defined conversations (thinking, tool
-   calls, word-by-word replies) deterministically, offline, even on the
-   deployed build; an optional live transport talks to GitHub Models (free
-   for any GitHub account, dev-only, token never leaves the Vite proxy). No
-   agent framework — one small event interface. Chat UI is harvested from
-   shadcn's chat components and restyled to the extracted design system.
+- **The look, cleaned up.** It pulls out your product's real design — the
+  colors, fonts, spacing, buttons, icons — and organizes them into one tidy
+  set. Everything you prototype automatically looks like your actual product,
+  not a generic template.
 
-## The stack (and why it's fixed)
+- **Fake data that looks real.** The playground is filled with realistic
+  made-up content (names, tasks, messages — whatever your app shows) so
+  screens look alive. It's all in one simple file you can ask the agent to
+  change ("add more items," "make the titles longer") — no databases, no
+  logins, no real customer data involved.
 
-Playgrounds are always **Vite + React + TypeScript + Tailwind v4**, built as
-a static SPA with hash routing and zero router/state libraries. The skill
-assumes the user has no stack opinion and optimizes for:
+- **A faithful copy of your main screen.** The agent recreates your app's
+  main screen so it matches the real thing closely, and makes the obvious
+  clicks work. This is your **starting point** — the "before" that every new
+  idea gets compared against.
 
-- **Live iteration** — Vite's sub-second boot and best-in-class HMR mean you
-  talk to the agent and watch the prototype update in real time.
-- **Agent fluency** — React + TypeScript + Tailwind is the highest
-  training-data stack there is; agents iterate fastest in it, and Tailwind
-  v4's `@theme` block is exactly the shape the extracted design tokens take.
-- **Click-deploy hosting** — `npm run build` emits a plain `dist/` folder.
-  No server, no env vars, no rewrite rules (that's what the hash routing is
-  for): drag it into Netlify, run `npx vercel`, or point Cloudflare/GitHub
-  Pages at it.
+- **A little app to browse it all.** A simple home screen lists every version
+  you've made, like pages in a design file. Click into any one to see it
+  full-screen, and flip between them to compare.
 
-Deliberately **not** Next.js or any meta-framework: there is no backend to
-render and no API to route, so a meta-framework only adds boot time and
-concepts for the agent to trip over. `npm install && npm run dev` is the
-entire setup.
+It all runs on your own computer, privately. Nothing connects to your real
+product, your servers, or your users.
 
-Each playground ships with a GitHub Pages workflow: push to `main`, flip
-Settings → Pages → Source to "GitHub Actions" once, and the playground is
-live at `https://<user>.github.io/<repo>/`. One caveat: **GitHub Pages sites
-are public**, even from private repos (private visibility exists only on
-GitHub Enterprise Cloud org repos). Prototypes run on fake data so there is
-nothing sensitive server-side, but if the designs themselves are
-confidential, deploy the same `dist/` to a host with access control instead
-— Cloudflare Pages + Access (free), or Netlify/Vercel password protection
-(paid tiers).
+## How to work in the playground
 
-## Components: harvested, never rebuilt, never stock
+A few things worth knowing to get the most out of it:
 
-Standard primitives — selects, menus, dialogs, comboboxes, chat surfaces —
-are not rebuilt from scratch and not left looking like a template. The rule
-is **harvest shadcn/ui as the behavior baseline, then restyle it to your
-product's exact spec**: every playground ships pre-wired for
-`npx shadcn@latest add <component>` (a `components.json` that lands
-components in `src/design-system/components/ui/`, the `@` alias, the `cn`
-helper, and the baseline deps). Agents keep shadcn's structure,
-accessibility, and interaction logic, and replace its styling layer with the
-tokens and measurements extracted from your real app. A control that still
-looks like stock shadcn is treated as a bug.
+- **The "master" is your reference — leave it alone.** That first faithful
+  copy of your app is the baseline. You don't edit it; you branch off it.
+  It's always there as the "this is how it looks today" anchor.
 
-## Prototyping agent chat
+- **Every new idea is a new version.** When you say *"try a version where the
+  menu is on the left"* or *"make it feel more playful,"* the agent creates a
+  fresh page for that idea and leaves everything else untouched. Nothing you
+  try overwrites anything else, so you can be fearless.
 
-Designing an assistant, agent session, or chat surface? Playgrounds treat
-this as choreography, not intelligence:
+- **Ask for many at once.** *"Give me six versions with six different
+  navigation styles"* gives you six pages to compare on the home screen. This
+  is the real superpower — exploring lots of directions cheaply and seeing
+  them all next to each other.
 
-- **Scripted agent (default).** `src/agent/` ships in every playground: a
-  ~150-line event runtime (thinking, tool calls, word-by-word streaming)
-  that plays conversations you define in `src/agent/scripts.ts` like
-  fixtures. Deterministic for design reviews, works offline, and keeps
-  working on the public deployed build. No agent framework.
-- **Live model (optional).** Swap one line to talk to
-  [GitHub Models](https://docs.github.com/github-models/prototyping-with-ai-models)
-  — free inference for every GitHub account. Create a PAT with only the
-  `models:read` permission, put `GITHUB_MODELS_TOKEN=…` in `.env.local`
-  (gitignored), restart `npm run dev`. The Vite dev proxy injects the token
-  server-side, so it never enters the bundle; deployed builds automatically
-  fall back to the scripted agent.
-- **Chat UI.** Harvested from shadcn's chat components (`message-scroller`,
-  `message`, `bubble`, `attachment`, `marker`) and restyled to your design
-  system, per the rule above.
+- **Talk in plain product language.** You don't need to know how any of it is
+  built. Describe what you want the way you'd describe it to a designer —
+  *"the sidebar feels cramped,"* *"try warmer colors,"* *"what if tasks were
+  cards instead of a list?"* — and the agent knows where that belongs.
 
-## Install
+- **Refine a version by pointing at it.** *"Keep going on the card one, but
+  bigger images"* tells the agent to keep working on that specific page.
 
-The [`skills` CLI](https://github.com/vercel-labs/skills) installs it into
-whatever agent you're running (27+ supported), globally or per-project:
+Good loop: look at what you have on the home screen → pick a direction to
+explore → ask for a few versions of it → compare → refine the winner → repeat.
 
-```bash
-npx skills add yitongzhang/prototype-playground-setup
-```
+## A note on quality
 
-Prefer to do it by hand? It's an open Agent Skill — clone the skill folder
-into your tool's skills directory (`~/.claude/skills/`, `~/.codex/skills/`,
-`.cursor/skills/`, or the repo itself for Devin):
-
-```bash
-git clone https://github.com/yitongzhang/prototype-playground-setup /tmp/pps \
-  && cp -r /tmp/pps/skills/prototype-playground ~/.claude/skills/
-```
-
-## Use
-
-From the repo you want to clone, invoke it your tool's way — `/prototype-playground`
-in Claude Code, `$prototype-playground` in Codex — or just ask in plain
-words ("set up a prototype playground for this app"); every tool
-auto-triggers the skill from its description. With arguments:
-
-```
-/prototype-playground path/to/repo "the inbox screen"
-```
-
-The skill surveys the repo, asks whether you want a specific screen or a
-generic setup, gathers reference screenshots, and builds the playground as a
-sibling directory. Afterwards, work directly in the playground:
-
-> "Copy master and try a version with a command-bar-first navigation."
->
-> "Make six iterations exploring different sidebar densities."
->
-> "Add 50 more tasks to the fixtures with longer titles."
->
-> "Add an assistant panel that can summarize my week — script three
-> conversations."
-
-The generated `AGENTS.md` inside each playground carries these conventions,
-so any agent session — with or without this skill installed — knows to start
-new iterations instead of editing master, style from the design system, and
-read data only from fixtures. `AGENTS.md` is the cross-tool standard (read
-natively by Codex, Cursor, Devin, Copilot, Gemini CLI, Windsurf, and more);
-a `CLAUDE.md` shim covers Claude Code. The playground itself is plain
-npm + Vite with zero agent-harness coupling.
-
-## Repo layout
-
-```
-skills/prototype-playground/
-  SKILL.md                        # the workflow (phases 0–7 + robustness notes)
-  references/
-    design-system-extraction.md   # where tokens hide per stack; cleaning +
-                                  #   shadcn-harvest rules
-    pixel-perfect-verification.md # screenshot-diff loop; exit criteria
-    agent-prototyping.md          # scripted vs live transports; chat UI harvest
-  templates/scaffold/             # copied to create each new playground
-  AGENTS.md + CLAUDE.md           # behavior rules shipped inside every playground
-  components.json                 # pre-wired `npx shadcn add` target paths
-  .github/workflows/              # push-to-deploy GitHub Pages workflow
-  src/shell/                      # Figma-style index + prototype chrome
-  src/design-system/              # tokens + components (filled by extraction)
-  src/data/                       # store + fixtures (filled by extraction)
-  src/agent/                      # fake-agent runtime + GitHub Models transport
-  src/prototypes/master/          # replaced by the pixel-perfect clone
-```
-
-## Notes
-
-- Works best with a high-capability model — the extraction and
-  pixel-matching phases are judgment-heavy.
-- The source repo is only ever read, never modified.
-- Templates are React; for Vue/Svelte/Angular sources the skill recreates
-  the five small shell files in the source framework instead.
-- Harness-neutral by design: the skill references no tool-specific
-  capabilities — screenshots, subagents, and browsing are described by
-  intent ("whatever screenshot capability the environment has"), so each
-  harness uses its own equivalents.
-
-## License
-
-MIT
+This works best with a capable, up-to-date AI model — recreating a design
+faithfully and matching your product's style takes a sharp eye. Give it a
+little back-and-forth and it gets better the more specific you are about what
+you want.
