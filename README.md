@@ -7,6 +7,20 @@ product's design system, fake data, and a pixel-perfect clone of your main
 screen — so an agent can crank out UI iterations without touching production
 builds, backends, or secrets.
 
+## Quick start
+
+Open your agent in the repo you want to clone and paste this:
+
+```text
+Clone https://github.com/yitongzhang/prototype-playground-skill into a temp
+directory, read its SKILL.md, and follow it to set up a prototype playground
+for this repo.
+```
+
+That's it — no install needed; it works in any coding agent. (For repeated
+use, install it as a proper skill below so "set up a prototype playground"
+triggers it automatically.)
+
 ## Why
 
 Prototyping inside a production repo is slow. CI builds are heavy, secrets
